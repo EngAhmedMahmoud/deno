@@ -21,7 +21,8 @@ let products = [
 import db from "./../utils/dbConnection.ts";
 let productCollection = db.collection("products");
 class Product {
-  products({ response }: { response: any }) {
+  async products({ response }: { response: any }) {
+    let products = await productCollection.find();
     response.body = {
       success: true,
       data: products,

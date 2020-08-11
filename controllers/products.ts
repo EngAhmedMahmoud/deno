@@ -18,7 +18,8 @@ let products = [
     currency: "USD",
   },
 ];
-
+import db from "./../utils/dbConnection.ts";
+let productCollection = db.collection("products");
 class Product {
   products({ response }: { response: any }) {
     response.body = {
@@ -63,9 +64,6 @@ class Product {
     }
     let product = await body.value;
     const errors = [];
-    if (!product.id) {
-      errors.push("id is required");
-    }
     if (!product.title) {
       errors.push("title is required");
     }
@@ -82,7 +80,8 @@ class Product {
         errors: errors,
       };
     } else {
-      products.push(product);
+      //save new product in db
+      await productCollection.insertOne(product);
       response.status = 201;
       response.body = {
         status: true,
